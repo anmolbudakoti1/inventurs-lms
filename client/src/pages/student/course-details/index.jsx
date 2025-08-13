@@ -17,7 +17,7 @@ import {
   createPaymentService,
   fetchStudentViewCourseDetailsService,
 } from "@/services";
-import { CheckCircle, Globe, Lock, PlayCircle } from "lucide-react";
+import { CheckCircle, Globe, Lock, PlayCircle, Users, Calendar, BookOpen, Clock, Star, Award, Shield } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -138,110 +138,257 @@ function StudentViewCourseDetailsPage() {
       : -1;
 
   return (
-    <div className=" mx-auto p-4">
-      <div className="bg-gray-900 text-white p-8 rounded-t-lg">
-        <h1 className="text-3xl font-bold mb-4">
-          {studentViewCourseDetails?.title}
-        </h1>
-        <p className="text-xl mb-4">{studentViewCourseDetails?.subtitle}</p>
-        <div className="flex items-center space-x-4 mt-2 text-sm">
-          <span>Created By {studentViewCourseDetails?.instructorName}</span>
-          <span>Created On {studentViewCourseDetails?.date.split("T")[0]}</span>
-          <span className="flex items-center">
-            <Globe className="mr-1 h-4 w-4" />
-            {studentViewCourseDetails?.primaryLanguage}
-          </span>
-          <span>
-            {studentViewCourseDetails?.students.length}{" "}
-            {studentViewCourseDetails?.students.length <= 1
-              ? "Student"
-              : "Students"}
-          </span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-20 w-32 h-32 bg-white rounded-full"></div>
+          <div className="absolute top-40 right-32 w-20 h-20 bg-white rounded-full"></div>
+          <div className="absolute bottom-20 left-40 w-28 h-28 bg-white rounded-full"></div>
         </div>
-      </div>
-      <div className="flex flex-col md:flex-row gap-8 mt-8">
-        <main className="flex-grow">
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>What you'll learn</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {studentViewCourseDetails?.objectives
-                  .split(",")
-                  .map((objective, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckCircle className="mr-2 h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>{objective}</span>
-                    </li>
-                  ))}
-              </ul>
-            </CardContent>
-          </Card>
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Course Description</CardTitle>
-            </CardHeader>
-            <CardContent>{studentViewCourseDetails?.description}</CardContent>
-          </Card>
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Course Curriculum</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {studentViewCourseDetails?.curriculum?.map(
-                (curriculumItem, index) => (
-                  <li
-                    className={`${
-                      curriculumItem?.freePreview
-                        ? "cursor-pointer"
-                        : "cursor-not-allowed"
-                    } flex items-center mb-4`}
-                    onClick={
-                      curriculumItem?.freePreview
-                        ? () => handleSetFreePreview(curriculumItem)
-                        : null
-                    }
-                  >
-                    {curriculumItem?.freePreview ? (
-                      <PlayCircle className="mr-2 h-4 w-4" />
-                    ) : (
-                      <Lock className="mr-2 h-4 w-4" />
-                    )}
-                    <span>{curriculumItem?.title}</span>
-                  </li>
-                )
-              )}
-            </CardContent>
-          </Card>
-        </main>
-        <aside className="w-full md:w-[500px]">
-          <Card className="sticky top-4">
-            <CardContent className="p-6">
-              <div className="aspect-video mb-4 rounded-lg flex items-center justify-center">
-                <VideoPlayer
-                  url={
-                    getIndexOfFreePreviewUrl !== -1
-                      ? studentViewCourseDetails?.curriculum[
-                          getIndexOfFreePreviewUrl
-                        ].videoUrl
-                      : ""
-                  }
-                  width="450px"
-                  height="200px"
-                />
-              </div>
+        
+        <div className="relative z-10 container mx-auto px-4 py-12">
+          <div className="grid lg:grid-cols-3 gap-8 items-center">
+            {/* Course Info */}
+            <div className="lg:col-span-2 text-white">
               <div className="mb-4">
-                <span className="text-3xl font-bold">
-                  ${studentViewCourseDetails?.pricing}
+                <span className="bg-gradient-to-r from-yellow-300 to-orange-300 text-gray-900 px-4 py-2 rounded-full text-sm font-bold">
+                  {studentViewCourseDetails?.level?.toUpperCase()} LEVEL
                 </span>
               </div>
-              <Button onClick={handleCreatePayment} className="w-full">
-                Buy Now
-              </Button>
-            </CardContent>
-          </Card>
-        </aside>
+              
+              <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+                {studentViewCourseDetails?.title}
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-indigo-100 mb-6 leading-relaxed">
+                {studentViewCourseDetails?.subtitle}
+              </p>
+
+              {/* Course Meta */}
+              <div className="flex flex-wrap items-center gap-6 text-indigo-200">
+                <div className="flex items-center space-x-2">
+                  <Users className="h-5 w-5" />
+                  <span className="font-medium">
+                    Created by <span className="text-yellow-300 font-bold">{studentViewCourseDetails?.instructorName}</span>
+                  </span>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Calendar className="h-5 w-5" />
+                  <span>{new Date(studentViewCourseDetails?.date).toLocaleDateString()}</span>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Globe className="h-5 w-5" />
+                  <span>{studentViewCourseDetails?.primaryLanguage}</span>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <BookOpen className="h-5 w-5" />
+                  <span>
+                    {studentViewCourseDetails?.students?.length || 0} {" "}
+                    {(studentViewCourseDetails?.students?.length || 0) <= 1 ? "Student" : "Students"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Rating & Stats */}
+              <div className="flex items-center space-x-6 mt-6 pt-6 border-t border-white/20">
+                <div className="flex items-center space-x-1">
+                  <div className="flex space-x-1">
+                    {[1,2,3,4,5].map((star) => (
+                      <Star key={star} className="h-5 w-5 fill-yellow-300 text-yellow-300" />
+                    ))}
+                  </div>
+                  <span className="text-yellow-300 font-bold ml-2">4.8</span>
+                  <span className="text-indigo-200">(1,234 reviews)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Preview Video Card */}
+            <div className="lg:col-span-1">
+              <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl rounded-3xl overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="aspect-video bg-gray-900 flex items-center justify-center">
+                    <VideoPlayer
+                      url={
+                        getIndexOfFreePreviewUrl !== -1
+                          ? studentViewCourseDetails?.curriculum[getIndexOfFreePreviewUrl].videoUrl
+                          : ""
+                      }
+                      width="100%"
+                      height="250px"
+                    />
+                  </div>
+                  
+                  <div className="p-6">
+                    <div className="text-center mb-6">
+                      <div className="flex items-center justify-center space-x-2 mb-2">
+                        <span className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                          ${studentViewCourseDetails?.pricing}
+                        </span>
+                        <span className="text-lg text-gray-500 line-through">$199</span>
+                      </div>
+                      <p className="text-green-600 font-semibold">Save 75% today!</p>
+                    </div>
+                    
+                    <Button 
+                      onClick={handleCreatePayment} 
+                      className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      Buy Now - Full Lifetime Access
+                    </Button>
+                    
+                    <div className="mt-4 space-y-2 text-center text-sm text-gray-600">
+                      <div className="flex items-center justify-center space-x-2">
+                        <Shield className="h-4 w-4 text-green-500" />
+                        <span>30-day money-back guarantee</span>
+                      </div>
+                      <div className="flex items-center justify-center space-x-2">
+                        <Award className="h-4 w-4 text-blue-500" />
+                        <span>Certificate of completion</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* What you'll learn */}
+            <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl rounded-3xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-green-500 to-teal-600 text-white p-8">
+                <CardTitle className="text-2xl font-bold flex items-center space-x-3">
+                  <CheckCircle className="h-7 w-7" />
+                  <span>What You'll Learn</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8">
+                <div className="grid md:grid-cols-2 gap-4">
+                  {studentViewCourseDetails?.objectives?.split(",").map((objective, index) => (
+                    <div key={index} className="flex items-start space-x-3 p-3 rounded-xl hover:bg-green-50 transition-colors duration-300">
+                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700 font-medium">{objective.trim()}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Course Description */}
+            <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl rounded-3xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-8">
+                <CardTitle className="text-2xl font-bold flex items-center space-x-3">
+                  <BookOpen className="h-7 w-7" />
+                  <span>Course Description</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8">
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  {studentViewCourseDetails?.description}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Course Curriculum */}
+            <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl rounded-3xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-8">
+                <CardTitle className="text-2xl font-bold flex items-center space-x-3">
+                  <PlayCircle className="h-7 w-7" />
+                  <span>Course Curriculum</span>
+                </CardTitle>
+                <p className="text-purple-100 mt-2">
+                  {studentViewCourseDetails?.curriculum?.length || 0} lectures
+                </p>
+              </CardHeader>
+              <CardContent className="p-8">
+                <div className="space-y-3">
+                  {studentViewCourseDetails?.curriculum?.map((curriculumItem, index) => (
+                    <div
+                      key={index}
+                      className={`${
+                        curriculumItem?.freePreview
+                          ? "cursor-pointer hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50"
+                          : "cursor-not-allowed opacity-60"
+                      } flex items-center p-4 rounded-2xl border-2 border-gray-100 transition-all duration-300`}
+                      onClick={curriculumItem?.freePreview ? () => handleSetFreePreview(curriculumItem) : null}
+                    >
+                      <div className="flex items-center space-x-4 flex-1">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                          curriculumItem?.freePreview 
+                            ? "bg-gradient-to-r from-green-400 to-blue-500 text-white" 
+                            : "bg-gray-200 text-gray-500"
+                        }`}>
+                          {curriculumItem?.freePreview ? (
+                            <PlayCircle className="h-6 w-6" />
+                          ) : (
+                            <Lock className="h-6 w-6" />
+                          )}
+                        </div>
+                        
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-gray-900">{curriculumItem?.title}</h4>
+                          <div className="flex items-center space-x-4 mt-1 text-sm text-gray-500">
+                            <span className="flex items-center space-x-1">
+                              <Clock className="h-4 w-4" />
+                              <span>15 min</span>
+                            </span>
+                            {curriculumItem?.freePreview && (
+                              <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-semibold">
+                                FREE PREVIEW
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-4 space-y-6">
+              {/* Course Features */}
+              <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl rounded-3xl overflow-hidden">
+                <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6">
+                  <CardTitle className="text-xl font-bold">This Course Includes</CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <Clock className="h-5 w-5 text-indigo-500" />
+                      <span className="text-gray-700">Lifetime access</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <BookOpen className="h-5 w-5 text-indigo-500" />
+                      <span className="text-gray-700">{studentViewCourseDetails?.curriculum?.length || 0} lectures</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Award className="h-5 w-5 text-indigo-500" />
+                      <span className="text-gray-700">Certificate of completion</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Users className="h-5 w-5 text-indigo-500" />
+                      <span className="text-gray-700">Access on mobile and desktop</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
       <Dialog
         open={showFreePreviewDialog}
@@ -250,35 +397,59 @@ function StudentViewCourseDetailsPage() {
           setDisplayCurrentVideoFreePreview(null);
         }}
       >
-        <DialogContent className="w-[800px]">
-          <DialogHeader>
-            <DialogTitle>Course Preview</DialogTitle>
+        <DialogContent className="max-w-4xl border-0 shadow-2xl rounded-3xl overflow-hidden">
+          <DialogHeader className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 -m-6 mb-4">
+            <DialogTitle className="text-2xl font-bold flex items-center space-x-3">
+              <PlayCircle className="h-7 w-7" />
+              <span>Course Preview</span>
+            </DialogTitle>
           </DialogHeader>
-          <div className="aspect-video rounded-lg flex items-center justify-center">
-            <VideoPlayer
-              url={displayCurrentVideoFreePreview}
-              width="450px"
-              height="200px"
-            />
+          
+          <div className="p-2">
+            <div className="aspect-video rounded-2xl overflow-hidden bg-gray-900 mb-6">
+              <VideoPlayer
+                url={displayCurrentVideoFreePreview}
+                width="100%"
+                height="450px"
+              />
+            </div>
+            
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              <h4 className="font-bold text-gray-900 mb-3">Available Previews:</h4>
+              {studentViewCourseDetails?.curriculum
+                ?.filter((item) => item.freePreview)
+                .map((filteredItem, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleSetFreePreview(filteredItem)}
+                    className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 cursor-pointer transition-all duration-300 border border-gray-100"
+                  >
+                    <PlayCircle className="h-5 w-5 text-indigo-500" />
+                    <span className="font-medium text-gray-700">{filteredItem?.title}</span>
+                    <span className="ml-auto bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-semibold">
+                      FREE
+                    </span>
+                  </div>
+                ))}
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            {studentViewCourseDetails?.curriculum
-              ?.filter((item) => item.freePreview)
-              .map((filteredItem) => (
-                <p
-                  onClick={() => handleSetFreePreview(filteredItem)}
-                  className="cursor-pointer text-[16px] font-medium"
-                >
-                  {filteredItem?.title}
-                </p>
-              ))}
-          </div>
-          <DialogFooter className="sm:justify-start">
+          
+          <DialogFooter className="p-6 -m-6 mt-4 bg-gray-50">
             <DialogClose asChild>
-              <Button type="button" variant="secondary">
-                Close
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="px-8 py-2 rounded-xl border-2 hover:bg-gray-100"
+              >
+                Close Preview
               </Button>
             </DialogClose>
+            <Button 
+              onClick={handleCreatePayment}
+              className="px-8 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl font-semibold"
+            >
+              Enroll Now - ${studentViewCourseDetails?.pricing}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
